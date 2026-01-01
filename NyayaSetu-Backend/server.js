@@ -1,5 +1,6 @@
 import express from "express";
-import dotenv from "dotenv";
+
+import '@dotenvx/dotenvx/config'
 import { connectDb } from "./src/db/db.js";
 import authRouter from "./src/routes/authRoutes.js";
 import videoRouter from "./src/routes/videoRoutes.js";
@@ -7,7 +8,6 @@ import cors from "cors";
 
 
 
-dotenv.config();
 
 const app = express();
 app.use(express.json());
@@ -24,7 +24,7 @@ app.use(cors({
 app.use("/api/auth", authRouter);
 app.use("/api/videos", videoRouter);
 
-const PORT = process.env.PORT || 3000;
+const PORT = `${process.env.PORT}` || 3000;
 
 const startServer = async () => {
     await connectDb()

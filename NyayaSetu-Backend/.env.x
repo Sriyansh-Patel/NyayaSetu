@@ -1,0 +1,2 @@
+# Sriyansh-Patel/nyayasetu/.env.x
+DOTENVX_PROJECT_ID=prj_08f8e6aee83dcd67c53361f3fab011a2

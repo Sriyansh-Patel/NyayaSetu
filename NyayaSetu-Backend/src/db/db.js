@@ -1,17 +1,17 @@
 // src/db/db.js
 import mongoose from "mongoose";
-import dotenv from "dotenv";
 
-dotenv.config();
+import '@dotenvx/dotenvx/config'
+
 
 export const connectDb = async () => {
   try {
-    if (!process.env.MONGODB_URI) {
-      throw new Error("MONGODB_URI is not defined in .env");
+    if (!`${process.env.MONGODB_URI}`) {
+      throw new Error("MONGODB_URI i`s not defined in .env");
     }
 
     // UPDATED: connect() no longer accepts deprecated options like useNewUrlParser
-    await mongoose.connect(process.env.MONGODB_URI);
+    await mongoose.connect(`${process.env.MONGODB_URI}`);
 
     console.log("✅ Connected to MongoDB with Mongoose");
   } catch (err) {
@@ -25,7 +25,7 @@ const connections = {};
 export const getDbConnection = (dbName) => {
   if (connections[dbName]) return connections[dbName];
 
-  const uri = process.env.MONGODB_URI;
+  const uri = `${process.env.MONGODB_URI}`;
   if (!uri) {
     throw new Error("MONGODB_URI is not defined in .env");
   }
