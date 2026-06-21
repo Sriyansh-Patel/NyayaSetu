@@ -1,9 +1,9 @@
 import express from "express";
 
 import '@dotenvx/dotenvx/config'
-import { connectDb } from "./src/db/db.js";
+import connectDb from "./src/db/db.js";
 import authRouter from "./src/routes/authRoutes.js";
-import videoRouter from "./src/routes/videoRoutes.js";
+import chatRoutes from "./src/routes/authChat.js";
 import cors from "cors";
 
 
@@ -22,7 +22,7 @@ app.use(cors({
 }));
 
 app.use("/api/auth", authRouter);
-app.use("/api/videos", videoRouter);
+app.use('/api/chat', chatRoutes);
 
 const PORT = `${process.env.PORT}` || 3000;
 

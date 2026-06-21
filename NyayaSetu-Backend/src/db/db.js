@@ -1,39 +1,34 @@
-// src/db/db.js
 import mongoose from "mongoose";
+import '@dotenvx/dotenvx/config';
 
-import '@dotenvx/dotenvx/config'
+// Primary Connection
+export default async function connectDb() {
+  // Logic Fix: Check the variable directly, not as a string
+  if (!process.env.MONGODB_URI) {
+    throw new Error("MONGODB_URI is not defined in .env");
+  }
 
-
-export const connectDb = async () => {
   try {
-    if (!`${process.env.MONGODB_URI}`) {
-      throw new Error("MONGODB_URI i`s not defined in .env");
-    }
-
-    // UPDATED: connect() no longer accepts deprecated options like useNewUrlParser
-    await mongoose.connect(`${process.env.MONGODB_URI}`);
-
-    console.log("✅ Connected to MongoDB with Mongoose");
+    await mongoose.connect(process.env.MONGODB_URI);
+    console.log("✅ Connected to primary MongoDB");
   } catch (err) {
     console.error("❌ MongoDB connection error:", err.message);
     process.exit(1);
   }
-};
+}
 
+// Multi-tenant / Multi-DB Connection Cache
 const connections = {};
 
 export const getDbConnection = (dbName) => {
   if (connections[dbName]) return connections[dbName];
 
-  const uri = `${process.env.MONGODB_URI}`;
-  if (!uri) {
+  if (!process.env.MONGODB_URI) {
     throw new Error("MONGODB_URI is not defined in .env");
   }
 
-  // UPDATED: createConnection() also works without the options
-  const conn = mongoose.createConnection(`${uri}/${dbName}`);
+  const conn = mongoose.createConnection(`${process.env.MONGODB_URI}/${dbName}`);
 
-  // Optional: Add event listeners to debug connection issues specific to this instance
   conn.on("error", (err) => console.error(`❌ Connection error for DB ${dbName}:`, err));
   conn.once("open", () => console.log(`✅ Connected to specific DB: ${dbName}`));
 
